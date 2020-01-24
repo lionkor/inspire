@@ -19,8 +19,21 @@ typedef enum Result
 #define ENDL "\n"
 #define STR_BAD_ARGC_ADD "expected one or more arguments to `add`. run `inspire help` to show help." ENDL
 #define STR_UNKNOWN_ERROR "an error occured." ENDL
+#define STR_HELP                                                                               \
+    "Usage:\n"                                                                                 \
+    "  'inspire add <text>' - adds the text to the list of ideas\n"                            \
+    "  'inspire give' - gives a random idea from the list\n"                                   \
+    "  'inspire help' - displays this help\n"                                                  \
+    "\nExamples:\n"                                                                            \
+    "  'inspire add Finish my game' - adds the idea \"Finish my game\" to the list of ideas\n" \
+    "  'inspire give' - prints a random idea from the list, for example \"Finish my game\"\n"  \
+    "\nLicensed under GPL-2.0\nReport bugs to development@kortlepel.com\n"
+#define STR_HELP_SHORT \
+    "Unknown usage. Run 'inspire help' to show help.\n"
 
-Result command_add(int argc, char** argv) {
+
+Result
+command_add(int argc, char** argv) {
     // argv[0] -> program name
     // argv[1] -> command "add"
     // argv[2] => idea string(s) to add
@@ -76,10 +89,12 @@ Result command_add(int argc, char** argv) {
 }
 
 Result command_give() {
+
     return OK;
 }
 
 Result command_help() {
+    printf("%s", STR_HELP);
     return OK;
 }
 
@@ -93,6 +108,8 @@ int main(int argc, char** argv) {
             return command_help();
         }
     }
+
+    printf("%s", STR_HELP_SHORT);
     return UNKNOWN_ARGS;
 }
 
