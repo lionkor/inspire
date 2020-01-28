@@ -47,6 +47,28 @@ Either run `cmake .` and then `make`, or just use gcc: `gcc main.c -o inspire`
 
     (the ability to remove items directly as a reaction to this is WIP)
 
+* To remove a specific idea from the list:
+    
+    `inspire remove` starts the process of removing an item from the idea list. This process is interactive.
+
+    ```
+    $ inspire remove
+    ideas:
+     ID  idea
+      0: finish my game
+      1: send my friend a gift
+      2: take a walk to the forest
+      3: idea i dont want
+    remove idea (ID) or "-1" to exit: 3
+    ideas:
+     ID  idea
+      0: finish my game
+      1: send my friend a gift
+      2: take a walk to the forest
+    remove idea (ID) or "-1" to exit: -1
+    $ 
+    ```
+
 * To see all stored ideas:
     
     ```

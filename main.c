@@ -17,6 +17,7 @@
     "Usage:\n"                                                                                      \
     "  'inspire add [text]' - adds the text to the list of ideas.\n"                                \
     "                         will read stdin instead if no text is given.\n"                       \
+    "  'inspire remove' - starts a prompt to remove specific ideas from the list\n"                 \
     "  'inspire give' - gives a random idea from the list\n"                                        \
     "  'inspire help' - displays this help\n"                                                       \
     "  'inspire show' - shows all ideas currently stored\n"                                         \
@@ -203,19 +204,52 @@ int command_show() {
     return 0;
 }
 
-int show_less() {
-
-    return 0;
-}
-
 int command_remove() {
     // interactive command, lots of stdin/out
-    bool done = false;
-    while (!done) {
-        int rc = show_less();
-        if (rc != 0)
-            break;
+    FILE*  fp      = open_inspire_data_file("rw");
+    size_t max_len = 1024;
+    char   line[max_len];
+
+    vector_t* lines = vector_create(sizeof(char) * max_len, 10);
+    while (fgets(line, max_len, fp) != NULL) {
+        // copy max_len chars from line into the vector
+        vector_push_back(lines, line);
     }
+
+    if (lines->size == 0) {
+        printf("no ideas stored!\n");
+        return -1;
+    }
+
+    while (true) {
+        printf("ideas:\n");
+        printf(" ID  idea\n");
+        for (size_t i = 0; i < lines->size; ++i) {
+            if (strlen(vector_at(lines, i)) == 0)
+                continue;
+            printf("%3lu: %s", i, vector_at(lines, i));
+        }
+        printf("remove idea (ID) or \"-1\" to exit: ");
+        int index;
+        scanf("%i", &index);
+        if (index < 0)
+            break;
+        if (index >= (long)lines->size) {
+            printf("ID out of range\n");
+        }
+        memset(vector_at(lines, index), 0, lines->elem_size);
+    }
+
+    // reopen the file, change mode to w (truncate)
+    freopen(NULL, "w", fp);
+    for (size_t i = 0; i < lines->size; ++i) {
+        if (strlen(vector_at(lines, i)) == 0)
+            continue;
+        fprintf(fp, "%s", vector_at(lines, i));
+    }
+
+    vector_free(lines);
+    fclose(fp);
     return 0;
 }
 
