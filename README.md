@@ -42,6 +42,9 @@ I find myself often lacking ideas for new projects or other things to make, so I
     my first idea!
     finish my game
     work on fixme's in 'ideas'
+    asteroids clone but you're the asteroid
     ```
+
+    this can then be piped to `less`, `shuf`, for other processing. 
 
 
