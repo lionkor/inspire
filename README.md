@@ -35,4 +35,13 @@ I find myself often lacking ideas for new projects or other things to make, so I
 
     (the ability to remove items directly as a reaction to this is WIP)
 
+* To see all stored ideas:
+    
+    ```
+    $ inspire show
+    my first idea!
+    finish my game
+    work on fixme's in 'ideas'
+    ```
+
 
