@@ -120,13 +120,13 @@ int command_add(int argc, char** argv) {
         // no extra args, we ask for input (thanks to Inferno_geek for this idea)
         size_t maxlen;
         char*  idea = NULL;
-        getline(&idea, &maxlen, stdin);
+        int    read = getline(&idea, &maxlen, stdin);
         if (!idea) {
             fprintf(stderr, STR_UNKNOWN_ERROR);
             perror("getline");
             return -1;
         }
-        if (strlen(idea) == 0) {
+        if (strlen(idea) == 0 || read == 0 || (strlen(idea) == 1 && idea[0] == '\n')) {
             fprintf(stderr, "empty idea, ignoring\n");
             return -1;
         }
