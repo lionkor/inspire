@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <stdbool.h>
 
 #define ENDL "\n"
 #define STR_BAD_ARGC_ADD "expected one or more arguments to `add`. run `inspire help` to show help." ENDL
@@ -63,15 +64,11 @@ void* vector_at(vector_t* v, size_t index) {
     return v->data + index * v->elem_size;
 }
 
-int command_add(int argc, char** argv) {
-    // argv[0] -> program name
-    // argv[1] -> command "add"
-    // argv[2] => idea string(s) to add
-
+FILE* open_inspire_data_file(char* openmode) {
     char* home_dir = getenv("HOME");
     if (!home_dir) {
         fprintf(stderr, STR_NO_ENV_HOME);
-        return -1;
+        return NULL;
     }
     char dir[1024];
     memset(dir, 0, 1024);
@@ -82,19 +79,30 @@ int command_add(int argc, char** argv) {
     if (rc != 0 && errno != EEXIST) {
         fprintf(stderr, STR_UNKNOWN_ERROR);
         perror("mkdir");
-        return -1;
+        return NULL;
     }
 
     strcat(dir, "/data");
 
-    // open the file in append mode
-    // (we assume that it exists or can be created at this point)
-    FILE* fp = fopen(dir, "a");
+    // we assume that the file exists or can be created at this point
+    FILE* fp = fopen(dir, openmode);
     if (!fp) {
         fprintf(stderr, STR_UNKNOWN_ERROR);
         perror("fopen");
-        return -1;
+        return NULL;
     }
+
+    return fp;
+}
+
+int command_add(int argc, char** argv) {
+    // argv[0] -> program name
+    // argv[1] -> command "add"
+    // argv[2] => idea string(s) to add
+
+    FILE* fp = open_inspire_data_file("a");
+    if (!fp)
+        return -1; // open_inspire_data_file already prints errors
 
     /* 
      * write all the args from including the third one.
@@ -124,7 +132,7 @@ int command_add(int argc, char** argv) {
         fprintf(fp, "%s", idea);
     }
 
-    rc = fclose(fp);
+    int rc = fclose(fp);
     if (rc != 0) {
         fprintf(stderr, STR_UNKNOWN_ERROR);
         perror("fclose");
@@ -135,31 +143,10 @@ int command_add(int argc, char** argv) {
 }
 
 int command_give() {
-    char* home_dir = getenv("HOME");
-    if (!home_dir) {
-        fprintf(stderr, STR_NO_ENV_HOME);
-        return -1;
-    }
-    char dir[1024];
-    memset(dir, 0, 1024);
-    strcpy(dir, home_dir);
-    strcat(dir, "/.inspire");
 
-    int rc = mkdir(dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    if (rc != 0 && errno != EEXIST) {
-        fprintf(stderr, STR_UNKNOWN_ERROR);
-        perror("mkdir");
-        return -1;
-    }
-
-    strcat(dir, "/data");
-
-    FILE* fp = fopen(dir, "r");
-    if (!fp) {
-        fprintf(stderr, STR_FOPEN_ERROR);
-        perror("fopen");
-        return -1;
-    }
+    FILE* fp = open_inspire_data_file("r");
+    if (!fp)
+        return -1; // open_inspire_data_file already prints errors
 
     // 1 KB max line length
     size_t max_len = 1024;
@@ -190,33 +177,31 @@ int command_help() {
 }
 
 int command_show() {
-    char* home_dir = getenv("HOME");
-    char  dir[1024];
-    memset(dir, 0, 1024);
-    strcpy(dir, home_dir);
-    strcat(dir, "/.inspire");
-
-    int rc = mkdir(dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    if (rc != 0 && errno != EEXIST) {
-        fprintf(stderr, STR_UNKNOWN_ERROR);
-        perror("mkdir");
-        return -1;
-    }
-
-    strcat(dir, "/data");
-
-    FILE* fp = fopen(dir, "r");
-    if (!fp) {
-        fprintf(stderr, STR_FOPEN_ERROR);
-        perror("fopen");
-        return -1;
-    }
+    FILE* fp = open_inspire_data_file("r");
+    if (!fp)
+        return -1; // open_inspire_data_file already prints errors
 
     // 1 KB max line length
     size_t max_len = 1024;
     char   line[max_len];
     while (fgets(line, max_len, fp) != NULL) {
         printf("%s", line);
+    }
+    return 0;
+}
+
+int show_less() {
+
+    return 0;
+}
+
+int command_remove() {
+    // interactive command, lots of stdin/out
+    bool done = false;
+    while (!done) {
+        int rc = show_less();
+        if (rc != 0)
+            break;
     }
     return 0;
 }
@@ -236,6 +221,8 @@ int main(int argc, char** argv) {
             return command_help();
         } else if (strcmp(argv[1], "show") == 0) {
             return command_show();
+        } else if (strcmp(argv[1], "remove") == 0) {
+            return command_remove();
         }
     }
 
