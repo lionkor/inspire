@@ -117,7 +117,6 @@ int command_add(int argc, char** argv) {
         // no extra args, we ask for input (thanks to Inferno_geek for this idea)
         size_t maxlen;
         char*  idea = NULL;
-        printf("add: ");
         getline(&idea, &maxlen, stdin);
         if (!idea) {
             fprintf(stderr, STR_UNKNOWN_ERROR);

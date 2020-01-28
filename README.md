@@ -29,7 +29,7 @@ Either run `cmake .` and then `make`, or just use gcc: `gcc main.c -o inspire`
     ```
     ```
     $ inspire add
-    add: My new idea
+    My new idea
     ```
 
 * To retrieve a random stored idea:
