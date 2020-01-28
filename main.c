@@ -39,8 +39,6 @@ vector_t* vector_create(size_t elem_size, size_t reserve) {
     v->capacity  = reserve;
     v->size      = 0;
     v->elem_size = elem_size;
-    if (reserve > 0)
-        memset(v->data, 0, reserve);
     return v;
 }
 
