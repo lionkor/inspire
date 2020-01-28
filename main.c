@@ -221,7 +221,10 @@ int command_remove() {
         return -1;
     }
 
+    // reopen the file, change mode to w (truncate)
+
     while (true) {
+
         printf("ideas:\n");
         printf(" ID  idea\n");
         for (size_t i = 0; i < lines->size; ++i) {
@@ -229,18 +232,25 @@ int command_remove() {
                 continue;
             printf("%3lu: %s", i, vector_at(lines, i));
         }
-        printf("remove idea (ID) or \"-1\" to exit: ");
+        printf("remove idea (ID) or \"-1\" to write changes: ");
         int index;
-        scanf("%i", &index);
+        int res = scanf("%d", &index);
+        if (res == EOF || res != 1) {
+            printf("Invalid input, exiting.\n");
+            scanf("%*[^\n]");
+            break;
+        }
+
         if (index < 0)
             break;
         if (index >= (long)lines->size) {
             printf("ID out of range\n");
+            scanf("%*[^\n]");
+            continue;
         }
         memset(vector_at(lines, index), 0, lines->elem_size);
     }
 
-    // reopen the file, change mode to w (truncate)
     freopen(NULL, "w", fp);
     for (size_t i = 0; i < lines->size; ++i) {
         if (strlen(vector_at(lines, i)) == 0)
