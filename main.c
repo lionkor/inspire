@@ -133,7 +133,7 @@ int command_give() {
 
     FILE* fp = fopen(dir, "r");
     if (!fp) {
-        fprintf(stderr, STR_UNKNOWN_ERROR);
+        fprintf(stderr, "an error occured and is displayed below. it is likely that this happened because no ideas have been added yet. run 'inspire help' to find out how to add some!\n");
         perror("fopen");
         return -1;
     }
