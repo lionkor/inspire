@@ -9,6 +9,10 @@
 #define ENDL "\n"
 #define STR_BAD_ARGC_ADD "expected one or more arguments to `add`. run `inspire help` to show help." ENDL
 #define STR_UNKNOWN_ERROR "an error occured." ENDL
+#define STR_NO_ENV_HOME "the environment variable 'HOME' was not found. please supply it if it's not defined." ENDL
+#define STR_FOPEN_ERROR "an error occured and is displayed below. it is likely that this happened because no ideas have been added yet. run 'inspire help' to find out how to add some!" ENDL
+
+// FIXME: use ENDL instead of \n
 #define STR_HELP                                                                               \
     "Usage:\n"                                                                                 \
     "  'inspire add <text>' - adds the text to the list of ideas\n"                            \
@@ -73,7 +77,7 @@ int command_add(int argc, char** argv) {
 
     char* home_dir = getenv("HOME");
     if (!home_dir) {
-        fprintf(stderr, "the environment variable 'HOME' was not found. please supply it if it's not defined.\n");
+        fprintf(stderr, STR_NO_ENV_HOME);
         return -1;
     }
     char dir[1024];
@@ -123,7 +127,7 @@ int command_add(int argc, char** argv) {
 int command_give() {
     char* home_dir = getenv("HOME");
     if (!home_dir) {
-        fprintf(stderr, "the environment variable 'HOME' was not found. please supply it if it's not defined.\n");
+        fprintf(stderr, STR_NO_ENV_HOME);
         return -1;
     }
     char dir[1024];
@@ -142,7 +146,7 @@ int command_give() {
 
     FILE* fp = fopen(dir, "r");
     if (!fp) {
-        fprintf(stderr, "an error occured and is displayed below. it is likely that this happened because no ideas have been added yet. run 'inspire help' to find out how to add some!\n");
+        fprintf(stderr, STR_FOPEN_ERROR);
         perror("fopen");
         return -1;
     }
@@ -193,7 +197,7 @@ int command_show() {
 
     FILE* fp = fopen(dir, "r");
     if (!fp) {
-        fprintf(stderr, "an error occured and is displayed below. it is likely that this happened because no ideas have been added yet. run 'inspire help' to find out how to add some!\n");
+        fprintf(stderr, STR_FOPEN_ERROR);
         perror("fopen");
         return -1;
     }
