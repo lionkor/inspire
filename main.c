@@ -13,15 +13,15 @@
 #define STR_FOPEN_ERROR "an error occured and is displayed below. it is likely that this happened because no ideas have been added yet. run 'inspire help' to find out how to add some!" ENDL
 
 // FIXME: use ENDL instead of \n
-#define STR_HELP                                                                               \
-    "Usage:\n"                                                                                 \
-    "  'inspire add <text>' - adds the text to the list of ideas\n"                            \
-    "  'inspire give' - gives a random idea from the list\n"                                   \
-    "  'inspire help' - displays this help\n"                                                  \
-    "  'inspire show' - shows all ideas currently stored\n"                                    \
-    "\nExamples :\n"                                                                           \
-    "  '$ inspire add Finish my game' - adds the idea 'Finish my game' to the list of ideas\n" \
-    "  '$ inspire give' - gives \"Finish my game\" or any other idea form the list of ideas\n" \
+#define STR_HELP                                                                                    \
+    "Usage:\n"                                                                                      \
+    "  'inspire add <text>' - adds the text to the list of ideas\n"                                 \
+    "  'inspire give' - gives a random idea from the list\n"                                        \
+    "  'inspire help' - displays this help\n"                                                       \
+    "  'inspire show' - shows all ideas currently stored\n"                                         \
+    "\nExamples :\n"                                                                                \
+    "  '$ inspire add Finish my game' - adds the idea 'Finish my game' to the list of ideas\n"      \
+    "  '$ inspire give' - gives \"Finish my game\" or another random idea from the list of ideas\n" \
     "\nLicensed under GPL-2.0\nReport bugs to development@kortlepel.com\n"
 #define STR_HELP_SHORT \
     "Unknown usage. Run 'inspire help' to show help.\n"
