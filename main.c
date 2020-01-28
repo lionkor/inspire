@@ -21,7 +21,7 @@
     "  'inspire show' - shows all ideas currently stored\n"                                    \
     "\nExamples :\n"                                                                           \
     "  '$ inspire add Finish my game' - adds the idea 'Finish my game' to the list of ideas\n" \
-    "  '$ inspire give' - gives \"Finish my game\"\n"                                          \
+    "  '$ inspire give' - gives \"Finish my game\" or any other idea form the list of ideas\n" \
     "\nLicensed under GPL-2.0\nReport bugs to development@kortlepel.com\n"
 #define STR_HELP_SHORT \
     "Unknown usage. Run 'inspire help' to show help.\n"
