@@ -167,6 +167,12 @@ int command_give() {
     }
 
     vector_free(lines);
+    int rc = fclose(fp);
+    if (rc != 0) {
+        fprintf(stderr, STR_UNKNOWN_ERROR);
+        perror("fclose");
+        return -1;
+    }
 
     return 0;
 }
@@ -186,6 +192,13 @@ int command_show() {
     char   line[max_len];
     while (fgets(line, max_len, fp) != NULL) {
         printf("%s", line);
+    }
+
+    int rc = fclose(fp);
+    if (rc != 0) {
+        fprintf(stderr, STR_UNKNOWN_ERROR);
+        perror("fclose");
+        return -1;
     }
     return 0;
 }
