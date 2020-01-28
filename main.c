@@ -14,9 +14,10 @@
     "  'inspire add <text>' - adds the text to the list of ideas\n"                            \
     "  'inspire give' - gives a random idea from the list\n"                                   \
     "  'inspire help' - displays this help\n"                                                  \
-    "\nExamples:\n"                                                                            \
-    "  'inspire add Finish my game' - adds the idea \"Finish my game\" to the list of ideas\n" \
-    "  'inspire give' - prints a random idea from the list, for example \"Finish my game\"\n"  \
+    "  'inspire show' - shows all ideas currently stored\n"                                    \
+    "\nExamples :\n"                                                                           \
+    "  '$ inspire add Finish my game' - adds the idea 'Finish my game' to the list of ideas\n" \
+    "  '$ inspire give' - gives \"Finish my game\"\n"                                          \
     "\nLicensed under GPL-2.0\nReport bugs to development@kortlepel.com\n"
 #define STR_HELP_SHORT \
     "Unknown usage. Run 'inspire help' to show help.\n"
@@ -170,6 +171,38 @@ int command_help() {
     return 0;
 }
 
+int command_show() {
+    char* home_dir = getenv("HOME");
+    char  dir[1024];
+    memset(dir, 0, 1024);
+    strcpy(dir, home_dir);
+    strcat(dir, "/.inspire");
+
+    int rc = mkdir(dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if (rc != 0 && errno != EEXIST) {
+        fprintf(stderr, STR_UNKNOWN_ERROR);
+        perror("mkdir");
+        return -1;
+    }
+
+    strcat(dir, "/data");
+
+    FILE* fp = fopen(dir, "r");
+    if (!fp) {
+        fprintf(stderr, "an error occured and is displayed below. it is likely that this happened because no ideas have been added yet. run 'inspire help' to find out how to add some!\n");
+        perror("fopen");
+        return -1;
+    }
+
+    // 1 KB max line length
+    size_t max_len = 1024;
+    char   line[max_len];
+    while (fgets(line, max_len, fp) != NULL) {
+        printf("%s", line);
+    }
+    return 0;
+}
+
 int main(int argc, char** argv) {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
@@ -183,6 +216,8 @@ int main(int argc, char** argv) {
             return command_give();
         } else if (strcmp(argv[1], "help") == 0) {
             return command_help();
+        } else if (strcmp(argv[1], "show") == 0) {
+            return command_show();
         }
     }
 
