@@ -122,7 +122,11 @@ int command_add(int argc, char** argv) {
 
 int command_give() {
     char* home_dir = getenv("HOME");
-    char  dir[1024];
+    if (!home_dir) {
+        fprintf(stderr, "the environment variable 'HOME' was not found. please supply it if it's not defined.\n");
+        return -1;
+    }
+    char dir[1024];
     memset(dir, 0, 1024);
     strcpy(dir, home_dir);
     strcat(dir, "/.inspire");
