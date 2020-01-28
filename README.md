@@ -5,6 +5,9 @@
 
 I find myself often lacking ideas for new projects or other things to make, so I made this little **command-line tool** to remember any ideas i get for later!
 
+## How to build
+
+Either run `cmake .` and then `make`, or just use gcc: `gcc main.c -o inspire`
 
 ## Usage is simple!
 
