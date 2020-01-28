@@ -48,3 +48,4 @@ I find myself often lacking ideas for new projects or other things to make, so I
     this can then be piped to `less`, `shuf`, for other processing. 
 
 
+* To clear all ideas, there is currently no builtin way. The best way is to remove the file `$HOME/.inspire/data`.
