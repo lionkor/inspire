@@ -67,11 +67,6 @@ int command_add(int argc, char** argv) {
     // argv[0] -> program name
     // argv[1] -> command "add"
     // argv[2] => idea string(s) to add
-    /*if (argc == 2) {
-        // not enough args
-        fprintf(stderr, STR_BAD_ARGC_ADD);
-        return -1;
-    }*/
 
     char* home_dir = getenv("HOME");
     if (!home_dir) {
