@@ -3,7 +3,7 @@
 *a simple command-line idea collection machine!*
 
 
-I find myself often lacking ideas for new projects or other things to make, so I made this little **command-line tool**!
+I find myself often lacking ideas for new projects or other things to make, so I made this little **command-line tool** to remember the ones i get!
 
 
 ## Usage is simple!
