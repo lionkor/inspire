@@ -14,13 +14,22 @@ Either run `cmake .` and then `make`, or just use gcc: `gcc main.c -o inspire`
 * To add a new idea that you have:
 
     ```
-    $ inspire add <idea>
+    $ inspire add [idea]
     ```
 
-    Example:
+    This will read from stdin if you don't supply text, so you can happily pipe into it:
+    ```
+    $ some_other_command | inspire add
+    ```
+
+    Examples:
 
     ```
     $ inspire add asteroids clone but you're the asteroid
+    ```
+    ```
+    $ inspire add
+    add: My new idea
     ```
 
 * To retrieve a random stored idea:

@@ -15,7 +15,8 @@
 // FIXME: use ENDL instead of \n
 #define STR_HELP                                                                                    \
     "Usage:\n"                                                                                      \
-    "  'inspire add <text>' - adds the text to the list of ideas\n"                                 \
+    "  'inspire add [text]' - adds the text to the list of ideas.\n"                                \
+    "                         will read stdin instead if no text is given.\n"                       \
     "  'inspire give' - gives a random idea from the list\n"                                        \
     "  'inspire help' - displays this help\n"                                                       \
     "  'inspire show' - shows all ideas currently stored\n"                                         \
@@ -67,11 +68,11 @@ int command_add(int argc, char** argv) {
     // argv[0] -> program name
     // argv[1] -> command "add"
     // argv[2] => idea string(s) to add
-    if (argc == 2) {
+    /*if (argc == 2) {
         // not enough args
         fprintf(stderr, STR_BAD_ARGC_ADD);
         return -1;
-    }
+    }*/
 
     char* home_dir = getenv("HOME");
     if (!home_dir) {
@@ -107,10 +108,28 @@ int command_add(int argc, char** argv) {
      * its possible to instead enforce entering the string in quotes,
      * but that seems unnecessary since we won't have other args anyways. 
      */
-    for (int i = 2; i < argc; ++i) {
-        fprintf(fp, "%s ", argv[i]);
+    if (argc > 2) {
+        for (int i = 2; i < argc; ++i) {
+            fprintf(fp, "%s ", argv[i]);
+        }
+        fprintf(fp, ENDL);
+    } else {
+        // no extra args, we ask for input (thanks to Inferno_geek for this idea)
+        size_t maxlen;
+        char*  idea = NULL;
+        printf("add: ");
+        getline(&idea, &maxlen, stdin);
+        if (!idea) {
+            fprintf(stderr, STR_UNKNOWN_ERROR);
+            perror("getline");
+            return -1;
+        }
+        if (strlen(idea) == 0) {
+            fprintf(stderr, "empty idea, ignoring\n");
+            return -1;
+        }
+        fprintf(fp, "%s", idea);
     }
-    fprintf(fp, ENDL);
 
     rc = fclose(fp);
     if (rc != 0) {
